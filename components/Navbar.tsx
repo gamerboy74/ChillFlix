@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import React, { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@/context/WalletContext"; // Import the useWallet hook
 import { useRouter } from "next/router"; // Import router for navigation
+import Image from "next/image";
 
 const MobileMenu = dynamic(() => import("@/components/MobileMenu"));
 const AccountMenu = dynamic(() => import("@/components/AccountMenu"));
@@ -47,7 +48,7 @@ const Navbar = () => {
           showBackground ? "bg-zinc-900 bg-opacity-90" : ""
         }`}
       >
-        <img
+        <Image
           className="h-4 lg:h-[50px]"
           src="/images/logo2.png"
           alt="logo"
@@ -109,7 +110,7 @@ const Navbar = () => {
             className="flex flex-row items-center gap-2 cursor-pointer relative"
           >
             <div className="w-6 h-6 lg:w-10 lg:h-10 rounded-md overflow-hidden">
-              <img src="/images/default-blue.png" alt="profile" />
+              <Image src="/images/default-blue.png" alt="profile" />
             </div>
             <BsChevronDown
               className={`text-white transition ${
