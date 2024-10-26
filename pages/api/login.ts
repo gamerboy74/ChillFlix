@@ -22,6 +22,7 @@ export default async function loginHandler(req: NextApiRequest, res: NextApiResp
             where: { email },
         });
 
+        // Check if the user exists
         if (!user) {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
@@ -29,6 +30,11 @@ export default async function loginHandler(req: NextApiRequest, res: NextApiResp
         // Check if the wallet address matches
         if (user.walletAddress !== walletAddress) {
             return res.status(401).json({ error: 'Wallet address does not match' });
+        }
+
+        // Check if the hashedPassword exists
+        if (!user.hashedPassword) {
+            return res.status(401).json({ error: 'Invalid email or password' });
         }
 
         // Verify the password

@@ -10,7 +10,6 @@ interface MovieListProps {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const MovieList: React.FC<MovieListProps> = ({data, title}) => {
-    if (isEmpty(data)) return null
     const { data: movies, error } = useSWR('/api/movies', fetcher);
 
     if (error) return <div>Failed to load</div>;

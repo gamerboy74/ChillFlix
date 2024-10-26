@@ -169,7 +169,7 @@ const PlanSelection: React.FC = () => {
       </div>
       <div className="p-8 min-h-screen">
         <h1 className="text-3xl font-bold text-center text-black mb-6 ">
-          Choose the plan that's right for you
+          Choose the plan thats right for you
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mx-40">
           {plans.map((plan) => (
