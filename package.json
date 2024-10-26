@@ -1,0 +1,57 @@
+{
+  "name": "netflix-clone",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "prisma generate --schema=prisma/schema.prisma",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@next-auth/prisma-adapter": "^1.0.5",
+    "@prisma/client": "^5.21.1",
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.31",
+    "@types/react-dom": "18.0.11",
+    "axios": "^1.3.4",
+    "bcrypt": "^5.1.0",
+    "eslint": "8.37.0",
+    "eslint-config-next": "13.2.4",
+    "ethers": "^6.13.4",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.453.0",
+    "next": "13.2.4",
+    "next-auth": "^4.20.1",
+    "prisma": "^5.21.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.12.0",
+    "react-router-dom": "^6.27.0",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1",
+    "swr": "^2.2.5",
+    "typescript": "5.0.3",
+    "web3": "^4.14.0",
+    "zustand": "^4.3.7"
+  },
+  "devDependencies": {
+    "@metamask/providers": "^18.1.0",
+    "@types/bcrypt": "^5.0.0",
+    "@types/lodash": "^4.14.192",
+    "@types/react-slick": "^0.23.13",
+    "@types/web3": "^1.0.20",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.3.1"
+  },
+  "description": "A Netflix clone built using [React](https://reactjs.org/), [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/) & [MongoDB](https://www.mongodb.com/). This is a full-stack application with authentication using [NextAuth](https://next-auth.js.org/).",
+  "main": "next.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
