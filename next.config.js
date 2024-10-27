@@ -5,6 +5,6 @@ const nextConfig = {
 
 module.exports = {
   images: {
-    domains: ['upload.wikimedia.org'], // Add the domain here
+    domains: ['firebasestorage.googleapis.com','assets-in.bmscdn.com','upload.wikimedia.org'],
   },
 };

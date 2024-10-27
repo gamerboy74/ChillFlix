@@ -8,6 +8,7 @@ import useMuteBillboard from "@/hooks/useMuteBillboard";
 import Web3 from "web3";
 import NetflixMembershipABI from "../NetflixMembershipABI.json"; // Import the ABI
 import { title } from "process";
+import Image from "next/image";
 
 interface MovieCardProps {
   data: Record<string, any>;
@@ -85,10 +86,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
 
   return (
     <div className="group bg-zinc-900 col-span relative h-[12vw]">
-      <img
+      <Image
         className="cursor-pointer object-cover transition duration shadow-xl rounded-md group-hover:opacity-90 delay-50 sm:group-hover:opacity-0 w-full h-[12vw]"
         src={data.thumbnailUrl}
         alt="thumbnail"
+        fill
       />
       <div
         className="opacity-0 absolute top-0 transition duration-200 z-10 invisible sm:visible w-full scale-0 delay-50 group-hover:scale-110 group-hover:-translate-y-[6vw] group-hover:translate-x-[2vw] group-hover:opacity-100"

@@ -6,6 +6,7 @@ import { useWallet } from "@/context/WalletContext";
 import Web3 from "web3";
 import contractAbi from "../NetflixMembershipABI.json";
 import Footer from "./Footer";
+import Image from "next/image";
 
 interface Plan {
   name: string;
@@ -140,7 +141,7 @@ const PlanSelection: React.FC = () => {
         
         <nav className="px-12 py-6">
           <div className="flex justify-between items-center mt-0">
-          <img src="/images/logo2.png" alt="Netflix Logo" className="h-20" />
+          <Image src="/images/logo2.png" alt="Netflix Logo" className="h-20" fill />
             {walletAddress ? (
               <div className="flex items-center gap-4">
                 <p className="text-black">{`Wallet: ${walletAddress.slice(
