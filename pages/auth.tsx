@@ -38,20 +38,21 @@ const Auth = () => {
                 password,
                 redirect: false,
             });
-
+    
             if (result?.error) {
-                console.log("Login error:", result.error); // Log login error
-                setError(result.error);
+                console.error("Login error:", result.error); // Log login error
+                setError(result.error); // Show user-friendly error message
             } else {
                 router.push('/main');
             }
         } catch (error) {
             console.error("Login failed:", error);
-            setError("An error occurred during login.");
+            setError("An unexpected error occurred during login.");
         } finally {
             setIsLoading(false);
         }
     }, [email, password, router]);
+    
 
     const register = useCallback(async () => {
         if (!walletAddress) {
