@@ -75,40 +75,34 @@ const PlanSelection: React.FC = () => {
       await connectWallet();
       return;
     }
-
+  
     if (web3) {
       const contract = new web3.eth.Contract(contractAbi, CONTRACT_ADDRESS);
       const etherCost = Web3.utils.toWei(selectedPlan.etherCost, "ether");
-      const planEnum = plans.findIndex(
-        (plan) => plan.name === selectedPlan.name
-      );
-
-      setLoading(true);
-
+      const planEnum = plans.findIndex((plan) => plan.name === selectedPlan.name);
+  
+      setLoading(true); // Start loading
+  
       if (membershipDetails?.active) {
         if (membershipDetails.plan === selectedPlan.name) {
-          alert(
-            `You already have an active ${selectedPlan.name} plan. You cannot purchase the same plan again.`
-          );
-          setLoading(false);
+          alert(`You already have an active ${selectedPlan.name} plan. You cannot purchase the same plan again.`);
+          setLoading(false); // Reset loading
           return;
         } else {
-          const userConfirmed = confirm(
-            `You have an active ${membershipDetails.plan} plan. Would you like to upgrade to ${selectedPlan.name}?`
-          );
+          const userConfirmed = confirm(`You have an active ${membershipDetails.plan} plan. Would you like to upgrade to ${selectedPlan.name}?`);
           if (!userConfirmed) {
-            setLoading(false);
+            setLoading(false); // Reset loading
             return;
           }
         }
       }
-
+  
       try {
         await contract.methods.purchaseMembership(planEnum).send({
           from: walletAddress,
           value: etherCost,
         });
-
+  
         await fetch("/api/saveMembership", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -118,22 +112,36 @@ const PlanSelection: React.FC = () => {
             date: new Date(),
           }),
         });
-
+  
         alert(`Successfully purchased the ${selectedPlan.name} plan!`);
-        router.push("/");
+        router.push("/"); // Redirect after successful purchase
       } catch (error: any) {
-        console.error("Transaction failed:", error);
-        const errorMessage = error.message.includes("User denied transaction")
-          ? "Transaction was denied. Please try again."
-          : "An error occurred during the purchase. Please check the console for details.";
+        // Handle transaction error gracefully
+        const isDenied = error.message.includes("User denied transaction signature");
+        const errorMessage = isDenied
+          ? "Transaction was denied. Refreshing the page..."
+          : "An error occurred during the purchase. Please try again later.";
+  
         alert(errorMessage);
+  
+        // Refresh the page if the transaction was denied
+        if (isDenied) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000); // Optional: add a delay for user experience
+        }
+  
+        // Ensure loading state is reset regardless of error type
+        setLoading(false);
       } finally {
+        // Reset loading state if it wasn't already handled
         setLoading(false);
       }
     } else {
       alert("Web3 not found! Please install MetaMask.");
     }
   };
+  
 
   return (
     <div className="relative h-full w-full bg-[url('/images/.jpg')] bg-no-repeat bg-center bg-fixed bg-cover bg-white">
@@ -141,7 +149,7 @@ const PlanSelection: React.FC = () => {
         
         <nav className="px-12 py-6">
           <div className="flex justify-between items-center mt-0">
-          <Image src="/images/logo2.png" alt="Netflix Logo" className="h-20" fill />
+          <Image src="/images/logo2.png" alt="Netflix Logo" className="h-20" height={20} width={200} />
             {walletAddress ? (
               <div className="flex items-center gap-4">
                 <p className="text-black">{`Wallet: ${walletAddress.slice(
