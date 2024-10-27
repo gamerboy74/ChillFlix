@@ -33,27 +33,36 @@ export default NextAuth({
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
+                    console.error("Authentication failed: Email and password required");
                     throw new Error('Email and password required');
                 }
-
+            
                 const user = await prismadb.user.findUnique({
                     where: {
                         email: credentials.email
                     }
                 });
-
-                if (!user || !user.hashedPassword) {
+            
+                if (!user) {
+                    console.error(`Authentication failed: No user found for email ${credentials.email}`);
                     throw new Error('Email does not exist');
                 }
-
+            
+                if (!user.hashedPassword) {
+                    console.error(`Authentication failed: User ${credentials.email} has no password set`);
+                    throw new Error('User has no password set');
+                }
+            
                 const isCorrectPassword = await compare(credentials.password, user.hashedPassword);
-
+            
                 if (!isCorrectPassword) {
+                    console.error(`Authentication failed: Incorrect password for email ${credentials.email}`);
                     throw new Error('Incorrect password');
                 }
-
+            
                 return user;
             }
+            
         })
     ],
     pages: {

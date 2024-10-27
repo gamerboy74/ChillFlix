@@ -9,47 +9,47 @@ import { useRouter } from 'next/router';
 import Image from "next/image";
 
 const Auth = () => {
-    const router = useRouter(); // Router for navigation
-    const { data: session, status } = useSession(); // Session state from next-auth
+    const router = useRouter();
+    const { data: session, status } = useSession();
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [walletAddress, setWalletAddress] = useState<string | null>(null);
     const [variant, setVariant] = useState<'login' | 'register'>('login');
     const [error, setError] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [isLoading, setIsLoading] = useState(false);
 
-    // Redirect if the user is already logged in
     useEffect(() => {
         if (status === "authenticated") {
-            router.push('/main'); // Redirect to main app if logged in
+            router.push('/main');
         }
     }, [status, router]);
 
     const toggleVariant = useCallback(() => {
         setVariant(currVariant => currVariant === 'login' ? 'register' : 'login');
-        setError(null); // Reset error when toggling variant
+        setError(null);
     }, []);
 
     const login = useCallback(async () => {
-        setIsLoading(true); // Start loading
+        setIsLoading(true);
         try {
             const result = await signIn('credentials', {
                 email,
                 password,
-                redirect: false, // Prevent automatic redirect
+                redirect: false,
             });
 
             if (result?.error) {
-                setError(result.error); // Show error if login fails
+                console.log("Login error:", result.error); // Log login error
+                setError(result.error);
             } else {
-                router.push('/main'); // Redirect to main app after successful login
+                router.push('/main');
             }
         } catch (error) {
-            console.log(error);
-            setError("An error occurred during login."); // Generic error message
+            console.error("Login failed:", error);
+            setError("An error occurred during login.");
         } finally {
-            setIsLoading(false); // Stop loading
+            setIsLoading(false);
         }
     }, [email, password, router]);
 
@@ -59,22 +59,22 @@ const Auth = () => {
             return;
         }
 
-        setIsLoading(true); // Start loading
+        setIsLoading(true);
         try {
             const response = await axios.post('/api/register', {
                 email,
                 name,
                 password,
-                walletAddress // Include wallet address in the registration request
+                walletAddress
             });
             if (response.status === 200) {
-                await login(); // Log the user in after successful registration
+                await login();
             }
         } catch (error: any) {
-            console.log("Registration Error:", error.response?.data?.error || error.message);
+            console.error("Registration Error:", error.response?.data?.error || error.message); // Log registration error
             setError(error.response?.data?.error || "An error occurred during registration.");
         } finally {
-            setIsLoading(false); // Stop loading
+            setIsLoading(false);
         }
     }, [email, name, password, login, walletAddress]);
 
@@ -87,6 +87,7 @@ const Auth = () => {
                 setWalletAddress(accounts[0]);
             } catch (error: any) {
                 console.error("Error connecting to wallet:", error);
+                alert("Failed to connect wallet. Please check console for details."); // User feedback
             }
         } else {
             alert("MetaMask is not installed. Please install it to use this feature.");
@@ -97,14 +98,14 @@ const Auth = () => {
         <div className="relative h-full w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
             <div className="bg-black h-full w-full lg:bg-opacity-50">
                 <nav className="px-12 py-5">
-                    <Image src="/images/logo2.png" alt="Netflix Logo"  className="object-cover h-25" height={10}  width={300}/>
+                    <Image src="/images/logo2.png" alt="Netflix Logo" className="object-cover h-25" height={10} width={300}/>
                 </nav>
                 <div className="flex justify-center">
                     <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
                         <h2 className="text-white text-4xl mb-8 font-semibold">
                             {variant === 'login' ? 'Sign in' : 'Register'}
                         </h2>
-                        {error && <p className="text-red-500">{error}</p>} {/* Display error messages */}
+                        {error && <p className="text-red-500">{error}</p>}
                         <div className="flex flex-col gap-4">
                             {variant === 'register' && (
                                 <Input
@@ -130,7 +131,7 @@ const Auth = () => {
                             />
                         </div>
                         <button
-                            onClick={isLoading ? undefined : (variant === 'login' ? login : register)} // Disable button while loading
+                            onClick={isLoading ? undefined : (variant === 'login' ? login : register)}
                             className={`bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                             {isLoading ? 'Loading...' : (variant === 'login' ? 'Login' : 'Sign up')}
                         </button>
