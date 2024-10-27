@@ -2,7 +2,6 @@ import { NextPageContext } from "next";
 import { getSession } from "next-auth/react";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useRouter } from "next/router";
-import Image from "next/image";
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -27,7 +26,7 @@ const Profiles = () => {
 
   const handleProfileClick = () => {
     // Use window.location.href for a full reload
-    window.location.href = "/";
+    window.location.href = "/main";
   };
 
   return (
@@ -52,7 +51,7 @@ const Profiles = () => {
                                         group-hover:border-white
                                         overflow-hidden"
               >
-                <Image src="/images/default-blue.png" alt="profile" />
+                <img src="/images/default-blue.png" alt="profile" />
               </div>
               <div>
                 <h2
