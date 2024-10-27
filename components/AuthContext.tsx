@@ -1,21 +1,29 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
+interface User {
+  id: string;
+  name: string;
+  // Add other fields as necessary
+}
+
 interface AuthContextType {
+  user: User | null;
   isAuthenticated: boolean;
-  login: () => void;
+  login: (userData: User) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const isAuthenticated = Boolean(user);
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
+  const login = (userData: User) => setUser(userData);
+  const logout = () => setUser(null);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

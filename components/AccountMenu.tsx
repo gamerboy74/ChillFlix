@@ -19,9 +19,9 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ visible }) => {
           <Image
             src="/images/default-blue.png"
             alt="profile"
-            className="w-8 rounded-md"
-
-            fill
+            className="w-10 rounded-md"
+            width={10}
+            height={30}
           />
           <p className="text-white text-sm group-hover:item:underline">
             {user?.name}
