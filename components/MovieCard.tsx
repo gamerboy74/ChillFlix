@@ -49,7 +49,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
         } catch (error) {
           console.error("Error checking membership status:", error);
           alert(
-            "Failed to check membership status. Please ensure you are connected to the right network and that the contract is deployed."
+            "Failed to check membership status. Please ensure you are connected to your wallet"
           );
           setIsMember(false); // Default to false if there's an error
         }

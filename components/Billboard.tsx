@@ -48,7 +48,7 @@ const Billboard = () => {
     <div className="relative h-screen max-h-[56.25vw]">
       <video
         ref={videoRef} // Attach the ref to the video element
-        className="w-full h-screen max-h-[56.25vw] object-cover brightness-[60%]"
+        className="w-full h-screen max-h-[56.25vw] object-cover brightness-[70%]"
         autoPlay
         muted={isMuted}
         loop={false} // Disable loop since we're handling it manually
