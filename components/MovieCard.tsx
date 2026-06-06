@@ -24,6 +24,12 @@ const MovieCard: React.FC<MovieCardProps> = ({ data, priority = false }) => {
 
   const handleMouseEnter = () => {
     setIsHovered(true);
+    // Prefetch for instant navigation when clicked
+    if (data?.id) {
+      router.prefetch(`/details/${data.id}`);
+      router.prefetch(`/watch/${data.id}`);
+    }
+    
     if (videoRef.current) {
       muteBillboard();
       videoRef.current.play().catch(() => {});

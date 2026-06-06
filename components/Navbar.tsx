@@ -64,13 +64,13 @@ const Navbar = () => {
 
         {/* Desktop Nav Links */}
         <div className="flex-row ml-2 gap-1 hidden lg:flex items-center">
-          <NavbarItem label="Home" onClick={() => router.push("/main")} active={router.pathname === "/main"} />
-          <NavbarItem label="Series" onClick={() => router.push("/series")} active={router.pathname === "/series"} />
-          <NavbarItem label="Movies" onClick={() => router.push("/movies")} active={router.pathname === "/movies"} />
-          <NavbarItem label="New & Popular" onClick={() => router.push("/popular")} active={router.pathname === "/popular"} />
-          <NavbarItem label="My List" onClick={() => router.push("/my-list")} active={router.pathname === "/my-list"} />
+          <NavbarItem label="Home" href="/main" active={router.pathname === "/main"} />
+          <NavbarItem label="Series" href="/series" active={router.pathname === "/series"} />
+          <NavbarItem label="Movies" href="/movies" active={router.pathname === "/movies"} />
+          <NavbarItem label="New & Popular" href="/popular" active={router.pathname === "/popular"} />
+          <NavbarItem label="My List" href="/my-list" active={router.pathname === "/my-list"} />
           {currentUser?.isAdmin && (
-            <NavbarItem label="Admin" onClick={() => router.push("/admin")} active={router.pathname === "/admin"} />
+            <NavbarItem label="Admin" href="/admin" active={router.pathname === "/admin"} />
           )}
         </div>
 
