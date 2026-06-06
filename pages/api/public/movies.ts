@@ -11,7 +11,6 @@ export default async function handler(
     const { data: movies, error } = await supabase
       .from("Movie")
       .select("id, title, description, thumbnailUrl, genre, onlyOnChillFlix")
-      .order("createdAt", { ascending: false })
       .limit(30);
 
     if (error) throw new Error(error.message);
