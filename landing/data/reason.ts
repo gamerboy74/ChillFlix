@@ -30,19 +30,19 @@ export const reasons: Reason[] = [
 
 export const faqs: FAQ[] = [
     {
-        question: "What is Chillflix?",
-        answer: "Chillflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more.",
+        question: "What is ChillFlix?",
+        answer: "ChillFlix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more.",
     },
     {
-        question: "How much does Chillflix cost?",
-        answer: "Netflix offers several subscription plans ranging from basic to premium, ensuring something for everyone.",
+        question: "How much does ChillFlix cost?",
+        answer: "ChillFlix is completely free! We don't have any subscription plans right now, just sign up and start watching your favorite movies and series.",
     },
     {
-        question: "Can I cancel my subscription?",
-        answer: "Yes, you can cancel your subscription at any time without any cancellation fees.",
+        question: "Do I need a credit card to sign up?",
+        answer: "No, you only need an email address to create an account and enjoy our content.",
     },
     {
-        question: "Can we pay in Cryptocurrancy?",
-        answer: "Yes, you can pay your subscription bill via cryptocurrancy.",
+        question: "Where can I watch?",
+        answer: "Watch anywhere, anytime. Sign in with your ChillFlix account to watch instantly on the web at chillflix.com from your personal computer or on any internet-connected device.",
     },
 ];
