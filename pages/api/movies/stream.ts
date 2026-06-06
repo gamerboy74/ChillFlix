@@ -88,26 +88,33 @@ export default async function handler(
     // If we don't have a valid Cinevo watch URL yet, search Cinevo and resolve it dynamically
     if (!isWatchUrl) {
       console.log(`🔍 [Stream API] No valid watch URL for "${movie.title}". Searching Cinevo…`);
-      const browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
-      const context = await browser.newContext({
-        userAgent: CinevoScraperService.USER_AGENT,
-        viewport: { width: 1280, height: 720 },
-        ignoreHTTPSErrors: true,
-      });
-      const page = await context.newPage();
-      try {
-        const resolved = await CinevoScraperService.resolveWatchUrlWithPage(page, movie.title, 1, { type: movie.type });
-        watchUrlStr = resolved;
-        console.log(`✅ [Stream API] Resolved watch URL: ${watchUrlStr}`);
-        // Save back
-        await supabase.from("Movie").update({ videoUrl: watchUrlStr }).eq("id", movieId);
-      } catch (err: any) {
-        console.error("❌ [Stream API] Search failed:", err.message);
-        // Fallback: build a guessed Cinevo URL
+      
+      if (process.env.VERCEL) {
+        console.warn("⚠️ [Stream API] Running on Vercel - skipping Playwright. Building guessed Cinevo URL.");
         const slug = movie.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
         watchUrlStr = `${cinevoBase}/watch/${movie.type === "series" ? "tv" : "movie"}/${slug}`;
-      } finally {
-        await browser.close().catch(() => {});
+      } else {
+        const browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
+        const context = await browser.newContext({
+          userAgent: CinevoScraperService.USER_AGENT,
+          viewport: { width: 1280, height: 720 },
+          ignoreHTTPSErrors: true,
+        });
+        const page = await context.newPage();
+        try {
+          const resolved = await CinevoScraperService.resolveWatchUrlWithPage(page, movie.title, 1, { type: movie.type });
+          watchUrlStr = resolved;
+          console.log(`✅ [Stream API] Resolved watch URL: ${watchUrlStr}`);
+          // Save back
+          await supabase.from("Movie").update({ videoUrl: watchUrlStr }).eq("id", movieId);
+        } catch (err: any) {
+          console.error("❌ [Stream API] Search failed:", err.message);
+          // Fallback: build a guessed Cinevo URL
+          const slug = movie.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+          watchUrlStr = `${cinevoBase}/watch/${movie.type === "series" ? "tv" : "movie"}/${slug}`;
+        } finally {
+          await browser.close().catch(() => {});
+        }
       }
     }
 
@@ -120,6 +127,15 @@ export default async function handler(
       watchUrl.searchParams.set("season", String(s));
       watchUrl.searchParams.set("ep", String(e));
       watchUrl.searchParams.set("episode", String(e));
+    }
+
+    if (process.env.VERCEL) {
+      console.warn(`⚠️ [Stream API] Running on Vercel - skipping Playwright. Falling back to watch URL iframe.`);
+      return res.status(200).json({
+        success: true,
+        streamUrl: watchUrl.toString(),
+        sources: [{ label: "Cinevo Player", iframeUrl: watchUrl.toString(), lang: "sub" }],
+      });
     }
 
     console.log(`🚀 [Stream API] Scraping direct player link on-demand for "${movie.title}" S${s}E${e}`);
