@@ -8,7 +8,9 @@ function mapUser(data: any): AdapterUser {
     email: data.email,
     image: data.image ?? null,
     emailVerified: data.emailVerified ? new Date(data.emailVerified) : null,
-  };
+    isAdmin: data.isAdmin ?? false,
+    favouriteIds: data.favouriteIds ?? [],
+  } as any;
 }
 
 export function SupabaseAdapter(): Adapter {
