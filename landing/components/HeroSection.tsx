@@ -23,7 +23,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ isAuthenticated }) => {
       <div className="flex items-center justify-center h-full bg-black bg-opacity-50">
         <div className="text-center">
           <h1 className="text-4xl font-bold">Unlimited movies, TV shows, and more.</h1>
-          <p className="text-xl mt-4">Watch anywhere. Cancel anytime.</p>
+          <p className="text-xl mt-4">Watch anywhere. 100% Free.</p>
           <button className="mt-8 bg-red-600 px-6 py-3 rounded" onClick={handleRedirect}>
             Get Started
           </button>
