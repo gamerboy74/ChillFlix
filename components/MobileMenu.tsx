@@ -3,9 +3,10 @@ import { useRouter } from "next/router"; // Import useRouter from Next.js
 
 interface MobileMenuProps {
     visible?: boolean;
+    isAdmin?: boolean;
 }
 
-const MobileMenu: React.FC<MobileMenuProps> = ({ visible }) => {
+const MobileMenu: React.FC<MobileMenuProps> = ({ visible, isAdmin }) => {
     const router = useRouter(); // Initialize useRouter
 
     // Function to handle navigation
@@ -54,18 +55,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ visible }) => {
                 >
                     Browse by Languages
                 </div>
-                <div
-                    className="px-3 text-center text-white hover:underline cursor-pointer"
-                    onClick={() => handleNavigation("/membership")} // Navigate to Membership
-                >
-                    Membership
-                </div>
-                <div
-                    className="px-3 text-center text-white hover:underline cursor-pointer"
-                    onClick={() => handleNavigation("/admin")} // Navigate to Admin
-                >
-                    Admin
-                </div>
+                {isAdmin && (
+                    <div
+                        className="px-3 text-center text-white hover:underline cursor-pointer"
+                        onClick={() => handleNavigation("/admin")} // Navigate to Admin
+                    >
+                        Admin
+                    </div>
+                )}
             </div>
         </div>
     );

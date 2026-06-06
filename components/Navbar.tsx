@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const MobileMenu = dynamic(() => import("@/components/MobileMenu"));
 const AccountMenu = dynamic(() => import("@/components/AccountMenu"));
@@ -17,6 +18,8 @@ const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  
+  const { data: currentUser } = useCurrentUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,8 +36,6 @@ const Navbar = () => {
   const toggleAccountMenu = useCallback(() => {
     setShowAccountMenu((prev) => !prev);
   }, []);
-
-  const goToMembershipPage = () => router.push("/membership");
 
   return (
     <nav className="w-full fixed z-40 top-0 left-0">
@@ -68,8 +69,9 @@ const Navbar = () => {
           <NavbarItem label="Movies" onClick={() => router.push("/movies")} active={router.pathname === "/movies"} />
           <NavbarItem label="New & Popular" onClick={() => router.push("/popular")} active={router.pathname === "/popular"} />
           <NavbarItem label="My List" onClick={() => router.push("/my-list")} active={router.pathname === "/my-list"} />
-          <NavbarItem label="Membership" onClick={goToMembershipPage} active={router.pathname === "/membership"} />
-          <NavbarItem label="Admin" onClick={() => router.push("/admin")} active={router.pathname === "/admin"} />
+          {currentUser?.isAdmin && (
+            <NavbarItem label="Admin" onClick={() => router.push("/admin")} active={router.pathname === "/admin"} />
+          )}
         </div>
 
         {/* Mobile Browse toggle */}
@@ -82,7 +84,7 @@ const Navbar = () => {
             className={`text-white transition-transform duration-200 ${showMobileMenu ? "rotate-180" : "rotate-0"}`}
             size={12}
           />
-          <MobileMenu visible={showMobileMenu} />
+          <MobileMenu visible={showMobileMenu} isAdmin={currentUser?.isAdmin} />
         </div>
 
         {/* Right-side icons */}
