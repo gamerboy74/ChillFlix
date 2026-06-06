@@ -32,14 +32,26 @@ async function tmdbFetch(endpoint: string, params: Record<string, string> = {}):
 
   const url = new URL(`${TMDB_BASE}${endpoint}`);
   url.searchParams.set("language", "en-US");
+  
+  // If the key is a v3 API key (32 chars), pass it in the query.
+  // If it's a v4 Read Access Token (JWT, contains dots), pass it in the header.
+  const isV4Token = API_KEY.includes('.');
+  if (!isV4Token) {
+    url.searchParams.set("api_key", API_KEY);
+  }
+
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
 
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+  };
+  
+  if (isV4Token) {
+    headers["Authorization"] = `Bearer ${API_KEY}`;
+  }
+
   const res = await fetch(url.toString(), {
-    headers: {
-      Accept: "application/json",
-      // Send key in Authorization header — keeps it out of logs / CDN cache keys
-      Authorization: `Bearer ${API_KEY}`,
-    },
+    headers,
     next: { revalidate: 3600 }, // cache for 1 hour in Next.js
   });
 
