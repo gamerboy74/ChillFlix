@@ -323,6 +323,7 @@ export async function getMoreDetailsByTitle(title: string, type: "movie" | "seri
     return {
       tmdbId,
       tagline: details.tagline || "",
+      posterUrl: details.poster_path ? tmdbPoster(details.poster_path, "w500") : null,
       cast: credits.cast?.slice(0, 8).map((c: any) => ({
         name: c.name,
         character: c.character,
