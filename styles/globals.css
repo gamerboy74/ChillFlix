@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────── */
+:root {
+  --red-primary: #e50914;
+  --red-hover:   #f40612;
+  --red-glow:    rgba(229, 9, 20, 0.35);
+  --bg-base:     #0a0a0a;
+  --bg-card:     #141414;
+  --bg-elevated: #1a1a1a;
+  --text-muted:  #6b7280;
+  --border-subtle: rgba(255,255,255,0.07);
+  --glass-bg:    rgba(10,10,10,0.80);
+  --glass-border: rgba(255,255,255,0.10);
+}
+
+/* ─── Base Reset ───────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  @apply h-full;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-base);
+  color: #e5e5e5;
+  @apply h-full overflow-x-hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+#__next {
+  @apply h-full;
+}
+
+/* ─── Scrollbar ────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.22);
+}
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Glassmorphism Utility ────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+}
+
+.glass-card {
+  background: rgba(20,20,20,0.85);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+}
+
+/* ─── Red Glow Button ──────────────────────────────── */
+.btn-red {
+  background: var(--red-primary);
+  box-shadow: 0 0 0 0 var(--red-glow);
+  transition: background 0.2s, box-shadow 0.3s, transform 0.2s;
+}
+.btn-red:hover {
+  background: var(--red-hover);
+  box-shadow: 0 0 20px 4px var(--red-glow);
+  transform: translateY(-1px);
+}
+.btn-red:active {
+  transform: translateY(0);
+  box-shadow: 0 0 8px 2px var(--red-glow);
+}
+
+/* ─── Text Gradient ────────────────────────────────── */
+.text-gradient-red {
+  background: linear-gradient(135deg, #ff4444 0%, #e50914 50%, #c40812 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─── Shimmer Skeleton ─────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+/* ─── Fade-in animations ───────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px 2px var(--red-glow); }
+  50%       { box-shadow: 0 0 24px 6px var(--red-glow); }
+}
+
+.animate-fade-in       { animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-in-scale { animation: fadeInScale 0.35s ease-out both; }
+.animate-slide-down    { animation: slideDown 0.25s ease-out both; }
+.animate-glow-pulse    { animation: glow-pulse 2s ease-in-out infinite; }
+
+/* ─── Card Hover Lift ──────────────────────────────── */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+}
+
+/* ─── Netflix-style gradient bottom vignette ───────── */
+.vignette-bottom {
+  background: linear-gradient(
+    to top,
+    #0a0a0a 0%,
+    rgba(10,10,10,0.8) 30%,
+    rgba(10,10,10,0.4) 60%,
+    transparent 100%
+  );
+}
+
+/* ─── Custom Select Dropdown ───────────────────────── */
+.custom-gradient {
+  background: radial-gradient(
+    140.76% 131.96% at 100% 100%,
+    rgb(176, 56, 220) 0%,
+    rgba(74, 42, 150, 0.5) 73.57%,
+    rgba(74, 42, 150, 0) 100%
+  ), rgb(29, 82, 157);
+}
+
+/* ─── Focus styles ─────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--red-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Animations ────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.97) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(229,9,20,0.3); }
+  50%       { box-shadow: 0 0 28px rgba(229,9,20,0.6); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.animate-fade-in       { animation: fadeIn      0.22s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-slide-down    { animation: slideDown   0.25s ease both; }
+.animate-fade-in-scale { animation: fadeInScale 0.3s  ease both; }
+.animate-shimmer {
+  background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite;
+}

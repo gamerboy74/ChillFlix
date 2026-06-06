@@ -1,0 +1,56 @@
+{
+  "name": "chillflix",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.107.0",
+    "@types/node": "^18.18.0",
+    "@types/react": "18.0.31",
+    "@types/react-dom": "18.0.11",
+    "axios": "^1.3.4",
+    "bcrypt": "^6.0.0",
+    "eslint": "8.37.0",
+    "eslint-config-next": "13.2.4",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.453.0",
+    "next": "^15.0.1",
+    "next-auth": "^4.24.14",
+    "playwright": "^1.60.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.6.0",
+    "react-icons": "^4.12.0",
+    "react-router-dom": "^6.27.0",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1",
+    "swr": "^2.2.5",
+    "typescript": "5.0.3",
+    "zod": "^3.25.76",
+    "zustand": "^4.3.7"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/lodash": "^4.14.192",
+    "@types/react-slick": "^0.23.13",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.3.1"
+  },
+  "description": "A streamin platform built using [React](https://reactjs.org/), [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/) & [Supabase](https://supabase.com/). This is a full-stack application with authentication using [NextAuth](https://next-auth.js.org/).",
+  "main": "next.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}

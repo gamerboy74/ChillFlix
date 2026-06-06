@@ -1,0 +1,11 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "no-console": ["warn", { "allow": ["error", "warn"] }],
+    "prefer-const": "error",
+    "no-var": "error",
+    "eqeqeq": ["error", "always"],
+    "react/self-closing-comp": "warn",
+    "react/jsx-no-duplicate-props": "error"
+  }
+}
