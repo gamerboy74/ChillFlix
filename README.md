@@ -67,7 +67,7 @@
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/chillflix.git
+git clone https://github.com/gamerboy74/ChillFlix.git
 cd chillflix
 
 # 2. Install dependencies
