@@ -9,7 +9,7 @@ import FAQSection from './components/FAQSection';
 const LandingPage: React.FC = () => (
   <div className="bg-black">
     <Navbar />
-    <HeroSection isAuthenticated={false} />
+    <HeroSection />
     <HomePage />
     <MoreReasons />
     <FAQSection />
