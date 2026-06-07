@@ -88,7 +88,7 @@ const Settings = () => {
             <div>
               <p className="text-zinc-400 text-sm mb-2 mt-4">Change Password</p>
               <p className="text-xs text-zinc-500 mb-4">
-                Leave blank if you don't want to change your password. If you signed up with Google or GitHub, setting a password here will allow you to log in via Email & Password as well.
+                Leave blank if you don&apos;t want to change your password. If you signed up with Google or GitHub, setting a password here will allow you to log in via Email & Password as well.
               </p>
               <Input
                 id="password"
