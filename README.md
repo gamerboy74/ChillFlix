@@ -184,7 +184,7 @@ TMDB_API_KEY="your_tmdb_api_key_here"
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) to view the app!
+Open [https://chill-flix-y56.vercel.app/](https://chill-flix-y56.vercel.app/) to view the app!
 
 ### 5. Seed the Catalog
 1. Log in with an account.
