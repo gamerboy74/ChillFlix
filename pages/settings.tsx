@@ -1,5 +1,6 @@
 import { NextPageContext } from "next";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/authOptions";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useRouter } from "next/router";
 import { useState, useCallback, useEffect } from "react";
@@ -9,7 +10,11 @@ import toast from "react-hot-toast";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 export async function getServerSideProps(context: NextPageContext) {
-  const session = await getSession(context);
+  const session = await getServerSession(
+    context.req as any,
+    context.res as any,
+    authOptions
+  );
 
   if (!session) {
     return {
