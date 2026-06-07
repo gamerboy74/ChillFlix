@@ -17,10 +17,12 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID || "",
       clientSecret: process.env.GITHUB_SECRET || "",
+      allowDangerousEmailAccountLinking: true,
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      allowDangerousEmailAccountLinking: true,
     }),
     Credentials({
       id: "credentials",
@@ -41,7 +43,7 @@ export const authOptions: NextAuthOptions = {
           .single();
 
         if (!user) throw new Error("Email does not exist");
-        if (!user.hashedPassword) throw new Error("User has no password set");
+        if (!user.hashedPassword) throw new Error("OAUTH_ACCOUNT_NO_PASSWORD");
 
         const isCorrectPassword = await compare(
           credentials.password,

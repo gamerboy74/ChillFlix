@@ -45,6 +45,7 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ visible }) => {
           Manage Profiles
         </button>
         <button
+          onClick={() => router.push("/settings")}
           className="w-full flex items-center gap-3 px-4 py-2.5 text-zinc-300 hover:text-white hover:bg-white/5 transition-colors text-sm"
         >
           <BsGear size={14} className="text-zinc-500" />

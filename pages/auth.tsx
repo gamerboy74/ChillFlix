@@ -33,7 +33,11 @@ const Auth = () => {
     try {
       const result = await signIn("credentials", { email, password, redirect: false });
       if (result?.error) {
-        toast.error(result.error);
+        if (result.error === "OAUTH_ACCOUNT_NO_PASSWORD") {
+          toast.error("You originally signed up with a social account (Google/GitHub). Please use that button to sign in.", { duration: 5000 });
+        } else {
+          toast.error(result.error);
+        }
       } else {
         toast.success("Welcome back to ChillFlix!");
         router.push("/main");
