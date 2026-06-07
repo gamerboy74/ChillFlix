@@ -636,8 +636,9 @@ export default function AdminPanel() {
                                       </button>
                                       {(() => {
                                         const isMovie = movie.type !== "series";
-                                        const movieEp = (movie as any).Episode?.find((e: any) => e.season === 1 && e.episode === 1);
-                                        const hasServers = movieEp && movieEp.videoUrl && movieEp.videoUrl.trim().startsWith("{");
+                                        const eps = (movie as any).Episode || (movie as any).episode || (movie as any).episodes;
+                                        const movieEp = eps?.find((e: any) => e.season === 1 && e.episode === 1);
+                                        const hasServers = movieEp && movieEp.videoUrl && movieEp.videoUrl.trim() !== "" && movieEp.videoUrl.trim() !== "{}";
                                         return isMovie && !hasServers && (
                                           <button
                                             onClick={() => handleResolveStream(movie.id, movie.title)}
