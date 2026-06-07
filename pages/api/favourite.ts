@@ -8,10 +8,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    if (req.method === "POST") {
-      const { currentUser } = await serverAuth(req, res);
-      const { movieId } = req.body;
+    const { currentUser } = await serverAuth(req, res);
+    const { movieId } = req.body;
+    const profileId = req.cookies.chillflix_profile_id;
 
+    if (req.method === "POST") {
       if (!movieId || typeof movieId !== "string") {
         return res.status(400).json({ error: "movieId is required" });
       }
@@ -24,8 +25,34 @@ export default async function handler(
 
       if (!existingMovie) return res.status(404).json({ error: "Movie not found" });
 
-      const newFavouriteIds = [...(currentUser.favouriteIds || []), movieId];
+      if (profileId) {
+        // Fetch active profile
+        const { data: profile } = await supabase
+          .from("Profile")
+          .select("id, favouriteIds")
+          .eq("id", profileId)
+          .eq("userId", currentUser.id)
+          .single();
 
+        if (profile) {
+          const newFavouriteIds = [...(profile.favouriteIds || []), movieId];
+          const { data: updatedProfile, error } = await supabase
+            .from("Profile")
+            .update({ favouriteIds: newFavouriteIds })
+            .eq("id", profileId)
+            .select("favouriteIds")
+            .single();
+
+          if (error) throw error;
+          return res.status(200).json({
+            ...currentUser,
+            favouriteIds: updatedProfile.favouriteIds,
+          });
+        }
+      }
+
+      // Fallback: update User
+      const newFavouriteIds = [...(currentUser.favouriteIds || []), movieId];
       const { data: user, error } = await supabase
         .from("User")
         .update({ favouriteIds: newFavouriteIds })
@@ -38,9 +65,6 @@ export default async function handler(
     }
 
     if (req.method === "DELETE") {
-      const { currentUser } = await serverAuth(req, res);
-      const { movieId } = req.body;
-
       if (!movieId || typeof movieId !== "string") {
         return res.status(400).json({ error: "movieId is required" });
       }
@@ -53,8 +77,34 @@ export default async function handler(
 
       if (!existingMovie) return res.status(404).json({ error: "Movie not found" });
 
-      const updatedFavouriteIds = without(currentUser.favouriteIds || [], movieId);
+      if (profileId) {
+        // Fetch active profile
+        const { data: profile } = await supabase
+          .from("Profile")
+          .select("id, favouriteIds")
+          .eq("id", profileId)
+          .eq("userId", currentUser.id)
+          .single();
 
+        if (profile) {
+          const updatedFavouriteIds = without(profile.favouriteIds || [], movieId);
+          const { data: updatedProfile, error } = await supabase
+            .from("Profile")
+            .update({ favouriteIds: updatedFavouriteIds })
+            .eq("id", profileId)
+            .select("favouriteIds")
+            .single();
+
+          if (error) throw error;
+          return res.status(200).json({
+            ...currentUser,
+            favouriteIds: updatedProfile.favouriteIds,
+          });
+        }
+      }
+
+      // Fallback: update User
+      const updatedFavouriteIds = without(currentUser.favouriteIds || [], movieId);
       const { data: user, error } = await supabase
         .from("User")
         .update({ favouriteIds: updatedFavouriteIds })

@@ -14,7 +14,15 @@ export default async function handler(
     try {
       const { data: movies, error } = await supabase
         .from("Movie")
-        .select("*");
+        .select(`
+          *,
+          Episode (
+            id,
+            season,
+            episode,
+            videoUrl
+          )
+        `);
 
       if (error) throw new Error(error.message);
       return res.status(200).json(movies || []);

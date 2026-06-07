@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-      const { data: episodes, error } = await supabase
+      const { data: fetchedEpisodes, error } = await supabase
         .from("Episode")
         .select("id, season, episode, title, videoUrl")
         .eq("movieId", movieId)
@@ -29,6 +29,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .order("episode", { ascending: true });
 
       if (error) throw error;
+      let episodes = fetchedEpisodes;
+
+      // If it's a Movie (not TV Series) and has no episode row yet, auto-create it
+      if (!episodes || episodes.length === 0) {
+        const { data: movie } = await supabase
+          .from("Movie")
+          .select("title, type")
+          .eq("id", movieId)
+          .single();
+
+        if (movie && movie.type !== "series") {
+          const { data: newEp, error: createErr } = await supabase
+            .from("Episode")
+            .insert({
+              movieId,
+              season: 1,
+              episode: 1,
+              title: movie.title,
+              videoUrl: "",
+            })
+            .select("id, season, episode, title, videoUrl")
+            .single();
+
+          if (!createErr && newEp) {
+            episodes = [newEp];
+          }
+        }
+      }
+
       return res.status(200).json(episodes ?? []);
     } catch (err) {
       console.error("[admin/episodes GET]", err);

@@ -130,6 +130,7 @@ export default function AdminPanel() {
         toast.success(data.message || `"${title}" resolved successfully!`);
       }
       setResolvedIds((p) => new Set([...p, movieId]));
+      fetchData();
     } catch (e: any) {
       toast.dismiss(toastId);
       toast.error(e.message ?? "Resolve failed");
@@ -622,34 +623,43 @@ export default function AdminPanel() {
                                   <td className="px-3 py-3.5 hidden lg:table-cell text-zinc-500">{movie.duration || "—"}</td>
                                   <td className="px-3 py-3.5 text-right">
                                     <div className="flex justify-end gap-1">
-                                      {movie.type === "series" && (
-                                        <button
-                                          onClick={() => setSelectedSeries(movie)}
-                                          className="p-2 rounded-lg text-zinc-500 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"
-                                          title="Manage Episodes"
-                                        >
-                                          <Tv size={14} />
-                                        </button>
-                                      )}
                                       <button
-                                        onClick={() => handleResolveStream(movie.id, movie.title)}
-                                        disabled={resolvingId === movie.id}
-                                        title="Resolve stream from Cinevo"
-                                        className={`p-2 rounded-lg transition-colors ${resolvingId === movie.id
-                                            ? "text-zinc-600 cursor-wait"
-                                            : resolvedIds.has(movie.id)
-                                              ? "text-green-400 bg-green-500/10"
-                                              : "text-zinc-500 hover:text-amber-400 hover:bg-amber-500/10"
-                                          }`}
+                                        onClick={() => setSelectedSeries(movie)}
+                                        className={`p-2 rounded-lg transition-colors ${
+                                          movie.type === "series"
+                                            ? "text-zinc-500 hover:text-purple-400 hover:bg-purple-500/10"
+                                            : "text-zinc-500 hover:text-red-400 hover:bg-red-500/10"
+                                        }`}
+                                        title={movie.type === "series" ? "Manage Episodes" : "Manage Streams & Mirrors"}
                                       >
-                                        {resolvingId === movie.id ? (
-                                          <RefreshCw size={14} className="animate-spin" />
-                                        ) : resolvedIds.has(movie.id) ? (
-                                          <Check size={14} />
-                                        ) : (
-                                          <PlayCircle size={14} />
-                                        )}
+                                        {movie.type === "series" ? <Tv size={14} /> : <Clapperboard size={14} />}
                                       </button>
+                                      {(() => {
+                                        const isMovie = movie.type !== "series";
+                                        const movieEp = (movie as any).Episode?.find((e: any) => e.season === 1 && e.episode === 1);
+                                        const hasServers = movieEp && movieEp.videoUrl && movieEp.videoUrl.trim().startsWith("{");
+                                        return isMovie && !hasServers && (
+                                          <button
+                                            onClick={() => handleResolveStream(movie.id, movie.title)}
+                                            disabled={resolvingId === movie.id}
+                                            title="Resolve stream from Cinevo"
+                                            className={`p-2 rounded-lg transition-colors ${resolvingId === movie.id
+                                                ? "text-zinc-600 cursor-wait"
+                                                : resolvedIds.has(movie.id)
+                                                  ? "text-green-400 bg-green-500/10"
+                                                  : "text-zinc-500 hover:text-amber-400 hover:bg-amber-500/10"
+                                              }`}
+                                          >
+                                            {resolvingId === movie.id ? (
+                                              <RefreshCw size={14} className="animate-spin" />
+                                            ) : resolvedIds.has(movie.id) ? (
+                                              <Check size={14} />
+                                            ) : (
+                                              <PlayCircle size={14} />
+                                            )}
+                                          </button>
+                                        );
+                                      })()}
                                       <button onClick={() => openEditModal(movie)} className="p-2 rounded-lg text-zinc-550 hover:text-white hover:bg-white/5 transition-colors" title="Edit">
                                         <Edit3 size={14} />
                                       </button>
@@ -1226,9 +1236,21 @@ function EpisodesManager({ series, onClose }: EpisodesManagerProps) {
         </button>
         <div>
           <h2 className="text-2xl font-extrabold tracking-tight flex items-center gap-2">
-            <Tv className="text-purple-400" size={24} /> {series.title} <span className="text-zinc-500 font-normal text-sm">Episodes</span>
+            {series.type === "series" ? (
+              <Tv className="text-purple-400" size={24} />
+            ) : (
+              <Clapperboard className="text-red-400" size={24} />
+            )}
+            {series.title}{" "}
+            <span className="text-zinc-500 font-normal text-sm">
+              {series.type === "series" ? "Episodes" : "Streams & Mirrors"}
+            </span>
           </h2>
-          <p className="text-zinc-500 text-xs mt-1">Manage, verify, edit, and resolve episodes across seasons</p>
+          <p className="text-zinc-500 text-xs mt-1">
+            {series.type === "series"
+              ? "Manage, verify, edit, and resolve episodes across seasons"
+              : "Manage, verify, edit, and resolve streaming sources for this movie"}
+          </p>
         </div>
       </div>
 
@@ -1240,12 +1262,20 @@ function EpisodesManager({ series, onClose }: EpisodesManagerProps) {
             {series.thumbnailUrl ? (
               <Image src={series.thumbnailUrl} alt={series.title} fill className="object-cover" />
             ) : (
-              <div className="h-full flex items-center justify-center"><Tv size={20} className="text-zinc-700" /></div>
+              <div className="h-full flex items-center justify-center font-bold">
+                {series.type === "series" ? <Tv size={20} className="text-zinc-700" /> : <Clapperboard size={20} className="text-zinc-700" />}
+              </div>
             )}
           </div>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-purple-500/10 text-purple-400">TV Series</span>
+              <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
+                series.type === "series"
+                  ? "bg-purple-500/10 text-purple-400"
+                  : "bg-red-500/10 text-red-400"
+              }`}>
+                {series.type === "series" ? "TV Series" : "Movie"}
+              </span>
               <span className="text-zinc-500 text-xs">{series.genre}</span>
             </div>
             <p className="text-zinc-300 text-sm leading-relaxed line-clamp-3">{series.description}</p>
@@ -1260,7 +1290,9 @@ function EpisodesManager({ series, onClose }: EpisodesManagerProps) {
         {/* Stats card */}
         <div className="bg-zinc-900 border border-white/[0.06] rounded-xl p-5 grid grid-cols-3 gap-2 text-center items-center">
           <div>
-            <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">Total</p>
+            <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">
+              {series.type === "series" ? "Total" : "Streams"}
+            </p>
             <p className="text-2xl font-extrabold mt-1 text-white">{stats.total}</p>
           </div>
           <div>
@@ -1275,20 +1307,22 @@ function EpisodesManager({ series, onClose }: EpisodesManagerProps) {
       </div>
 
       {/* Season Selector Tabs */}
-      <div className="flex gap-2 border-b border-white/[0.05] pb-px overflow-x-auto scrollbar-hide">
-        {seasonsList.map((s: any) => (
-          <button
-            key={s.seasonNumber}
-            onClick={() => setSelectedSeason(s.seasonNumber)}
-            className={`px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all whitespace-nowrap ${selectedSeason === s.seasonNumber
-                ? "border-purple-500 text-purple-400"
-                : "border-transparent text-zinc-500 hover:text-white"
-              }`}
-          >
-            Season {s.seasonNumber} ({s.episodeCount} Ep)
-          </button>
-        ))}
-      </div>
+      {series.type === "series" && (
+        <div className="flex gap-2 border-b border-white/[0.05] pb-px overflow-x-auto scrollbar-hide">
+          {seasonsList.map((s: any) => (
+            <button
+              key={s.seasonNumber}
+              onClick={() => setSelectedSeason(s.seasonNumber)}
+              className={`px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all whitespace-nowrap ${selectedSeason === s.seasonNumber
+                  ? "border-purple-500 text-purple-400"
+                  : "border-transparent text-zinc-500 hover:text-white"
+                }`}
+            >
+              Season {s.seasonNumber} ({s.episodeCount} Ep)
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Loading state */}
       {loading ? (

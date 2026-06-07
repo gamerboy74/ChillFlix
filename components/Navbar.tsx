@@ -128,11 +128,13 @@ const Navbar = () => {
           >
             <div className="w-8 h-8 rounded-md overflow-hidden ring-2 ring-transparent group-hover:ring-white/30 transition-all duration-200">
               <Image
-                src="/images/default-blue.png"
+                key={currentUser?.image || "default"}
+                src={currentUser?.image || "/images/default-blue.png"}
                 alt="profile"
-                className="object-cover"
+                className="object-cover w-full h-full"
                 height={60}
                 width={60}
+                unoptimized={!!currentUser?.image}
               />
             </div>
             <BsChevronDown

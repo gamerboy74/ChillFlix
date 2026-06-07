@@ -10,15 +10,29 @@ export default async function handler(
 
   try {
     const { currentUser } = await serverAuth(req, res);
+    const profileId = req.cookies.chillflix_profile_id;
+    let favouriteIds = currentUser.favouriteIds || [];
 
-    if (!currentUser.favouriteIds?.length) {
+    if (profileId) {
+      const { data: profile } = await supabase
+        .from("Profile")
+        .select("favouriteIds")
+        .eq("id", profileId)
+        .eq("userId", currentUser.id)
+        .single();
+      if (profile) {
+        favouriteIds = profile.favouriteIds || [];
+      }
+    }
+
+    if (!favouriteIds.length) {
       return res.status(200).json([]);
     }
 
     const { data: favouriteMovies, error } = await supabase
       .from("Movie")
       .select("id, title, description, thumbnailUrl, genre, duration, type, onlyOnChillFlix, seasonsData")
-      .in("id", currentUser.favouriteIds);
+      .in("id", favouriteIds);
 
     if (error) throw new Error(error.message);
     return res.status(200).json(favouriteMovies ?? []);
