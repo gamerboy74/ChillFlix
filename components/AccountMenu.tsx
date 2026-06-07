@@ -38,14 +38,14 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ visible }) => {
       {/* Menu items */}
       <div className="py-1.5">
         <button
-          onClick={() => router.push("/profiles")}
+          onClick={() => { window.location.href = "/profiles"; }}
           className="w-full flex items-center gap-3 px-4 py-2.5 text-zinc-300 hover:text-white hover:bg-white/5 transition-colors text-sm"
         >
           <BsPerson size={15} className="text-zinc-500" />
           Manage Profiles
         </button>
         <button
-          onClick={() => router.push("/settings")}
+          onClick={() => { window.location.href = "/settings"; }}
           className="w-full flex items-center gap-3 px-4 py-2.5 text-zinc-300 hover:text-white hover:bg-white/5 transition-colors text-sm"
         >
           <BsGear size={14} className="text-zinc-500" />

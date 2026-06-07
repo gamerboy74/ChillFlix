@@ -57,7 +57,7 @@ const Settings = () => {
       {/* Navbar */}
       <nav className="w-full px-4 md:px-12 py-6 flex items-center">
         <button
-          onClick={() => router.push("/main")}
+          onClick={() => { window.location.href = "/main"; }}
           className="flex flex-row items-center gap-2 hover:opacity-80 transition"
         >
           <ArrowLeft size={24} />
